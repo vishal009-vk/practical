@@ -1,0 +1,83 @@
+<x-app-layout title="Home">
+
+    <x-slot name="heading">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Tasks</h1>
+
+            <a href="{{ route('tasks.index') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                <i class="fas fa-arrow-left fa-sm text-white-50"></i>
+                Back
+            </a>
+        </div>
+    </x-slot>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-tasks me-1"></i>
+            Create Task
+        </div>
+        <div class="card-body">
+            <form action="{{ route('tasks.store') }}" method="post">
+                @csrf
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Title</label>
+                        <input type="text" name="title" class="form-control" value="{{ old('title') }}"/>
+
+                        @error('title')
+                        <span class="text-danger">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-4">
+                        <label>User</label>
+                        <select class="form-control" name="user">
+                            <option value="">Select User</option>
+                            @foreach ($users as $user)
+                            <option value="{{ $user->id }}" {{ old('user') == $user->id ? 'selected' : '' }}>{{ $user->first_name }} {{ $user->last_name }}</option>
+                            @endforeach
+                        </select>
+
+                        @error('user')
+                        <span class="text-danger">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label>Status</label>
+                        <select class="form-control" name="status">
+                            <option value="Pending" {{ old('status') == 'Pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="In Progress" {{ old('status') == 'In Progress' ? 'selected' : '' }}>In Progress</option>
+                            <option value="Completed" {{ old('status') == 'Completed' ? 'selected' : '' }}>Completed</option>
+                        </select>
+
+                        @error('status')
+                        <span class="text-danger">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-12">
+                        <label>Description</label>
+                        <textarea name="description" class="form-control" rows="6">{{ old('description') }}</textarea>
+
+                        @error('description')
+                        <span class="text-danger">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        <input type="submit" value="Save Task" class="btn btn-primary" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</x-app-layout>
